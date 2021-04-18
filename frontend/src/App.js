@@ -8,11 +8,29 @@ const App = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault()
-    console.log(title,images)
+
+    let formData = new FormData()
+    formData.append('post[title]',title)
+
+    for(let index in images){
+      if(typeof images[index] === 'object'){
+          formData.append('post[images][]',images[index])
+      }
+    }
+
+    fetch('http://localhost:3000/posts',{
+      method: 'POST',
+      body: formData
+    }).then(res => res.json())
+    .then(console.log)
   }
 
-  const handleUpload = (e) => {
-    console.log(e.target.files)
+  const handleChange = (e) => {
+    if(e.target.name === "title"){
+      setTitle(e.target.value)
+    }else{
+      setImages(e.target.files)
+    }
   }
 
   return (
@@ -23,9 +41,9 @@ const App = () => {
       </header>
 
       <form onSubmit={handleSubmit}>
-        <input name="title" type="text" id="title" placeholder="Enter title.." />
+        <input name="title" onChange={handleChange} type="text" id="title" placeholder="Enter title.." />
         <br/>
-        <input name="images" onChange={handleUpload} type="file" />
+        <input name="images" onChange={handleChange} type="file" multiple />
         <br />
         <input type="submit" value="Upload Image" />
       </form>
