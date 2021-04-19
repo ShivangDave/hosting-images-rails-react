@@ -41,7 +41,7 @@ const App = () => {
       </header>
 
       <form onSubmit={handleSubmit}>
-        <input name="title" onChange={handleChange} type="text" id="title" placeholder="Enter title.." />
+        <input name="title" onChange={handleChange} type="text" placeholder="Enter title.." />
         <br/>
         <input name="images" onChange={handleChange} type="file" multiple />
         <br />
