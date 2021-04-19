@@ -1,4 +1,4 @@
-# How to host images Rails + React
+# How to host images? Rails + React
 - Let's learn how to upload images and associate 'em to an instance while using `React` as your frontend and `Rails API` as backend.
 
 
