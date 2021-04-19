@@ -15,6 +15,7 @@
     - [ActiveStorage]
     - [ActiveModel Serializers]
     - [ActiveModel Validators]
+    - [Additional Resources]
 
 ## Front End
 
@@ -227,3 +228,4 @@
 [Microsoft Azure Configuration]: https://edgeguides.rubyonrails.org/active_storage_overview.html#microsoft-azure-storage-service
 [Google Cloud Configuration]: https://edgeguides.rubyonrails.org/active_storage_overview.html#google-cloud-storage-service
 [Mirror Service]: https://edgeguides.rubyonrails.org/active_storage_overview.html#mirror-service
+[Additional Resources]: https://github.com/ShivangDave/hosting-images-rails-react/README.md#more-resources
