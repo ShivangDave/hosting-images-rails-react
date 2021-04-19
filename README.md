@@ -110,10 +110,112 @@
 
 ## Backend
 
-## Resources
+- Step 1:
+  - Let's start by scaffolding a new `Rails` application using `rails new <app-name> --api` command.
+
+
+- Step 2:
+  - Once the command is done running, we can start to configure [ActiveStorage]. That's where our images / attachments are going to be stored.
+  - Use `rails active_storage:install` command to scaffold migrations needed to start using [ActiveStorage].
+  - Next run `rails db:migrate`. That'll create the `ActiveStorage` tables.
+
+
+- Step 3:
+  - For our sample resource, we're going to go with a `Post` model.
+  - Use `rails g resource post title:string --no-test-framework` to generate the files.
+  - Once that's done, we can add the association for the image.
+
+  ```ruby
+    class Post
+      #
+      # One image association
+      #
+      has_one_attached :image
+    end
+
+    # OR
+
+    class Post
+      #
+      # Multiple image associations
+      #
+      has_many_attached :images
+    end
+  ```
+
+- Step 4:
+  - Now we can choose where we want to store our images.
+  - Rails conveniently provides us a way to use `Local` or `Remote` storages for the attachments.
+  - We can configure those services in `config/storage.yml`
+  ```yml
+      local:
+        service: Disk
+        root: <%= Rails.root.join("storage") %>
+
+      test:
+        service: Disk
+        root: <%= Rails.root.join("tmp/storage") %>
+
+      amazon:
+        service: S3
+        access_key_id: ""
+        secret_access_key: ""
+        bucket: ""
+        region: "" # e.g. 'us-east-1'
+  ```
+
+  - And round that up by adding services to `development.rb` and/or `production.rb`
+  ```ruby
+    #
+    # Using local disk
+    # Store files locally.
+    config.active_storage.service = :local
+
+    #
+    # Store files on Amazon S3.
+    config.active_storage.service = :amazon
+  ```
+
+- Step 5:
+  - Optional: Configure the controller method
+  ```ruby
+    class PostsController < ApplicationController
+
+        def create
+          @post = Post.create(posts_params)
+
+          #
+          # There are better ways to serialize the response
+          #
+          render :json => {
+            post: @post,
+            images: @post.images.map { |img| url_for(img) }
+          }
+        end
+
+        #
+        # Strong params
+        #
+        private
+        def posts_params
+          params.require(:post).permit(:title,:images => [])
+        end
+    end
+  ```
+
+- **All Done!** Our backend is now ready to create posts and attach images. ***optional:*** Throw a `byebug` in your `create` method and test it out :)
+
+**Note:**
+- ***url_for*** method will return the direct link to the image(s) that are stored in our database.
+
+## More Resources
 - [Rails Docs on ActiveStorage]
 - [Rails Docs on ActiveModel Serializers]
 - [Rails Docs on ActiveModel Validators]
+- [AWS S3 Service Configuration]
+- [Microsoft Azure Configuration]
+- [Google Cloud Configuration]
+- [Mirror Service]
 
 [Rails Docs on ActiveStorage]: https://edgeguides.rubyonrails.org/active_storage_overview.html
 [ActiveStorage]: https://edgeguides.rubyonrails.org/active_storage_overview.html
@@ -121,3 +223,7 @@
 [ActiveModel Serializers]: https://github.com/rails-api/active_model_serializers
 [Rails Docs on ActiveModel Validators]: https://api.rubyonrails.org/v6.1.3.1/classes/ActiveModel/Validator.html
 [ActiveModel Validators]: https://api.rubyonrails.org/v6.1.3.1/classes/ActiveModel/Validator.html
+[AWS S3 Service Configuration]: https://edgeguides.rubyonrails.org/active_storage_overview.html#s3-service-amazon-s3-and-s3-compatible-apis
+[Microsoft Azure Configuration]: https://edgeguides.rubyonrails.org/active_storage_overview.html#microsoft-azure-storage-service
+[Google Cloud Configuration]: https://edgeguides.rubyonrails.org/active_storage_overview.html#google-cloud-storage-service
+[Mirror Service]: https://edgeguides.rubyonrails.org/active_storage_overview.html#mirror-service
