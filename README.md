@@ -2,9 +2,9 @@
 - Let's learn how to upload images and associate 'em to an instance while using `React` as your frontend and `Rails API` as backend.
 
 
-- I'll divide the guide into two parts:
-  - Front End Instructions
-  - Backend Instructions
+- I'll divide the guide in two parts:
+  - [Frontend Instructions](https://github.com/ShivangDave/hosting-images-rails-react#front-end)
+  - [Backend Instructions](https://github.com/ShivangDave/hosting-images-rails-react#backend)
 
 
 - **Prerequisites**:
